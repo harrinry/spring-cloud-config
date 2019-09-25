@@ -1,6 +1,8 @@
 info:
   component: Config Server
 spring:
+  profiles:
+    active: composite
   application:
     name: configserver
   autoconfigure.exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -8,14 +10,11 @@ spring:
     default_domain: cloud.config.server
   cloud:
     config:
+      allowOverride: true
       server:
-        git:
-          uri: https://github.com/spring-cloud-samples/config-repo
-          repos:
-            - patterns: multi-repo-demo-*
-              uri: https://github.com/spring-cloud-samples/config-repo
+        composite:
 
 server:
-  port: 8888
+  port: 8800
 management:
   context_path: /admin

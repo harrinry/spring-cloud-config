@@ -31,8 +31,10 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigServerApplication {
 
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(ConfigServerApplication.class)
-				.properties("spring.config.name=configserver").run(args);
+		System.setProperty("server.env", "PD06");
+		System.setProperty("cfgmgr.class.path", "\\\\amica\\files\\envConfig\\appresources");
+		new SpringApplicationBuilder(ConfigServerApplication.class).properties("spring.config.name=configserver")
+				.run(args);
 	}
 
 }
