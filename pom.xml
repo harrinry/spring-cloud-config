@@ -33,6 +33,7 @@
 		</maven-checkstyle-plugin.failsOnViolation>
 		<maven-checkstyle-plugin.includeTestSourceDirectory>true
 		</maven-checkstyle-plugin.includeTestSourceDirectory>
+		<maven.deploy.skip>true</maven.deploy.skip>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<amica.java.version>1.8</amica.java.version>
