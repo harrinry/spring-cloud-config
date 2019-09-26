@@ -2,7 +2,7 @@ info:
   component: Config Server
 spring:
   profiles:
-    active: composite
+    active: configurationManager
   application:
     name: configserver
   autoconfigure.exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
@@ -12,8 +12,7 @@ spring:
     config:
       allowOverride: true
       server:
-        composite:
-
+        configurationManager:
 server:
   port: 8800
 management:

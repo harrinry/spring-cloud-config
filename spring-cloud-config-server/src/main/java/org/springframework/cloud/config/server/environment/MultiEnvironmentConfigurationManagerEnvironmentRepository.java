@@ -16,8 +16,7 @@ import com.google.common.collect.Lists;
 import org.springframework.cloud.config.environment.Environment;
 import org.springframework.core.Ordered;
 
-public class MultiEnvironmentConfigurationManagerEnvironmentRepository
-		implements EnvironmentRepository, Ordered {
+public class MultiEnvironmentConfigurationManagerEnvironmentRepository implements EnvironmentRepository, Ordered {
 
 	@Override
 	public int getOrder() {
@@ -33,22 +32,17 @@ public class MultiEnvironmentConfigurationManagerEnvironmentRepository
 
 		Map<String, Object> newComponentConfiguration = new HashMap<String, Object>();
 
-		List<String> configNamesToOmit = Arrays.asList("HealthEndpoints",
-				"RequiredAWFDatabases", "EdgeAPIs", "EBillModificationSourceTranslations",
-				"Manifests", "Notification", "Components", "RequiredWSClients",
-				"WebApplicationComponents", "ESignSigningFrameURLs", "System_Defaults",
-				"EDBPaymentUserMapping", "SecureResources", "RequiredApplicationURLs",
-				"RequiredFileShareEntries", "WebServiceComponents", "ChasePayFrameURLs",
-				"RequiredJMXComponents", "Class_Reg", "HealthEndpoints", "JMX",
-				"WSConfigFiles", "RequiredAWFQueues", "SpectrumClient", "Environment",
-				"ZuulRoutes", "Legacy", "junk");
+		List<String> configNamesToOmit = Arrays.asList("HealthEndpoints", "RequiredAWFDatabases", "EdgeAPIs",
+				"EBillModificationSourceTranslations", "Manifests", "Notification", "Components", "RequiredWSClients",
+				"WebApplicationComponents", "ESignSigningFrameURLs", "System_Defaults", "EDBPaymentUserMapping",
+				"SecureResources", "RequiredApplicationURLs", "RequiredFileShareEntries", "WebServiceComponents",
+				"ChasePayFrameURLs", "RequiredJMXComponents", "Class_Reg", "HealthEndpoints", "JMX", "WSConfigFiles",
+				"RequiredAWFQueues", "SpectrumClient", "Environment", "ZuulRoutes", "Legacy", "junk");
 
 		Set<String> configurationNames = componentConfiguration.getConfigurationNames();
 
-		EnhancedConfiguration environmentConfiguration = componentConfiguration
-				.getConfiguration("Environment");
-		EnhancedConfiguration serverConfiguration = componentConfiguration
-				.getConfiguration("Servers");
+		EnhancedConfiguration environmentConfiguration = componentConfiguration.getConfiguration("Environment");
+		EnhancedConfiguration serverConfiguration = componentConfiguration.getConfiguration("Servers");
 
 		for (String configurationName : configurationNames) {
 			List<String> configurationKeys = Lists.newArrayList();
@@ -56,8 +50,7 @@ public class MultiEnvironmentConfigurationManagerEnvironmentRepository
 			if (configNamesToOmit.contains(configurationName)) {
 				continue;
 			}
-			EnhancedConfiguration configuration = componentConfiguration
-					.getConfiguration(configurationName);
+			EnhancedConfiguration configuration = componentConfiguration.getConfiguration(configurationName);
 			Iterator<String> keyIterator = configuration.getKeys();
 			String key = "";
 			List<SpringProperty> properties = new ArrayList<SpringProperty>();
@@ -65,8 +58,7 @@ public class MultiEnvironmentConfigurationManagerEnvironmentRepository
 				key = keyIterator.next();
 				if (!configurationName.equalsIgnoreCase("server")
 						&& !configurationName.equalsIgnoreCase("environment")) {
-					if (environmentConfiguration.containsKey(key)
-							|| serverConfiguration.containsKey(key)) {
+					if (environmentConfiguration.containsKey(key) || serverConfiguration.containsKey(key)) {
 						continue;
 					}
 				}
@@ -74,24 +66,21 @@ public class MultiEnvironmentConfigurationManagerEnvironmentRepository
 				SpringProperty property = new SpringProperty();
 				property.setPrefix(configuration.getConfigurationDescriptor().getName());
 				property.setKey(key);
-				List value = configuration.getList(key);
+				List<Object> value = configuration.getList(key);
 				if (value.size() > 1) {
 					property.setValue(value);
-				}
-				else {
+				} else {
 					property.setValue(value.get(0));
 				}
 				properties.add(property);
 			}
 			for (SpringProperty property : properties) {
 				configurationKeys.add(property.getKey());
-				newComponentConfiguration.put(
-						property.getPrefix() + "." + property.getKey(),
-						property.getValue());
+				newComponentConfiguration.put(property.getPrefix() + "." + property.getKey(), property.getValue());
 			}
-			newComponentConfiguration
-					.put(configuration.getConfigurationDescriptor().getName() + "."
-							+ "configurationKeys", configurationKeys);
+			newComponentConfiguration.put(
+					configuration.getConfigurationDescriptor().getName() + "." + "configurationKeys",
+					configurationKeys);
 		}
 
 		ConfigurationManagerPropertySource configurationManagerPropertySource = new ConfigurationManagerPropertySource(
